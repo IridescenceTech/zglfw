@@ -14,6 +14,8 @@ pub fn build(b: *Builder) void {
     const exe = b.addExecutable("zglfw", "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
+
+    //Note - this is linking on windows - change for your needs!
     exe.linkSystemLibrary("glfw3");
     exe.linkSystemLibrary("c");
     exe.linkSystemLibrary("opengl32");
