@@ -11,10 +11,15 @@ pub fn build(b: *Builder) void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
     const mode = b.standardReleaseOptions();
 
-    const exe = b.addExecutable("zglfw", "src/glfw.zig");
+    const exe = b.addExecutable("zglfw", "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
-    exe.linkSystemLibrary("glfw");
+    exe.linkSystemLibrary("glfw3");
+    exe.linkSystemLibrary("c");
+    exe.linkSystemLibrary("opengl32");
+    exe.linkSystemLibrary("user32");
+    exe.linkSystemLibrary("gdi32");
+    exe.linkSystemLibrary("shell32");
     exe.install();
 
     const run_cmd = exe.run();
