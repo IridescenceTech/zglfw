@@ -1,4 +1,4 @@
-const glfw = @import("glfw3.zig");
+const glfw = @import("glfw.zig");
 const std = @import("std");
 
 pub fn main() !void {
@@ -14,21 +14,21 @@ pub fn main() !void {
     //var mons = try glfw.getMonitors(&count);
 
     //Or this
-    var monitor : ?*glfw.Monitor = glfw.getPrimaryMonitor();
+    //var monitor = try glfw.getPrimaryMonitor();
 
     try glfw.init();
-    defer glfw.terminate();
+    defer glfw.terminate() catch unreachable;
 
     std.debug.warn("GLFW Init Succeeded.\n", .{});
 
     var window : *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
 
-    while(!glfw.windowShouldClose(window)){
+    while(!try glfw.windowShouldClose(window)){
         
-        if(glfw.getKey(window, glfw.Key.Escape) == glfw.KeyState.Press){
-            glfw.setWindowShouldClose(window, true);
+        if((try glfw.getKey(window, glfw.Key.Escape)) == glfw.KeyState.Press){
+            try glfw.setWindowShouldClose(window, true);
         }
 
-        glfw.pollEvents();
+        try glfw.pollEvents();
     }
 }

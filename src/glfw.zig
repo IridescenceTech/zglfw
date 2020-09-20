@@ -636,14 +636,14 @@ pub fn windowHint(hint: WindowHint, value: c_int) !void{
 }
 
 extern fn glfwWindowHintString(hint: c_int, value: [*c]const u8) void;
-pub fn windowHintString(hint: WindowHint, value: []const u8) !void{
-    glfwWindowHintString(@enumToInt(hint), @ptrCast([*c]const u8, &value));
+pub fn windowHintString(hint: WindowHint, value: [*c]const u8) !void{
+    glfwWindowHintString(@enumToInt(hint), value);
     try errorCheck();
 }
 
 extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*c]const u8, monitor: ?*Monitor, share: ?*Window) ?*Window;
-pub fn createWindow(width: c_int, height: c_int, title: []const u8, monitor: ?*Monitor, share: ?*Window) !*Window{
-    var res = glfwCreateWindow(width, height,  @ptrCast([*c]const u8, &title), monitor, share);
+pub fn createWindow(width: c_int, height: c_int, title: [*c]const u8, monitor: ?*Monitor, share: ?*Window) !*Window{
+    var res = glfwCreateWindow(width, height, title, monitor, share);
     try errorCheck();
     if(res == null){
         return GLFWError.PlatformError;
