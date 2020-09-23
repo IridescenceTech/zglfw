@@ -419,7 +419,7 @@ pub const Monitor = c_long;
 pub const Window = c_long;
 pub const Cursor = c_long;
 
-pub const ErrorFun = fn(error_code: c_int, description: [*c]u8) callconv(.C) void;
+pub const ErrorFun = fn(error_code: c_int, description: [*:0]u8) callconv(.C) void;
 pub const WindowPosFun = fn(window: *Window, xpos: c_int, ypos: c_int) callconv(.C) void;
 pub const WindowSizeFun = fn(window: *Window, width: c_int, height: c_int) callconv(.C) void;
 pub const WindowCloseFun = fn(window: *Window) callconv(.C) void;
@@ -444,7 +444,7 @@ pub const Charfun = fn (window: *Window,codepoint: c_uint) callconv(.C) void;
 
 //Mods refers to the bitfield of Modifiers
 pub const CharmodsFun = fn (window: *Window,codepoint: c_uint, mods: c_int) callconv(.C) void;
-pub const DropFun = fn (window: *Window, path_count: c_int, paths: [*c]const u8) callconv(.C) void;
+pub const DropFun = fn (window: *Window, path_count: c_int, paths: [*:0]const u8) callconv(.C) void;
 
 //Event is one of two states defined by the enum 'Connection'
 pub const Monitorfun = fn (monitor : *Monitor, event : c_int) callconv(.C) void;
@@ -462,16 +462,16 @@ pub const Vidmode = extern struct{
 };
 
 pub const Gammaramp = extern struct{
-    red : [*c]u16,
-    green : [*c]u16,
-    blue : [*c]u16,
+    red : ?[*]u16,
+    green : ?[*]u16,
+    blue : ?[*]u16,
     size : u32
 };
 
 pub const Image = extern struct{
     width : i32,
     height : i32,
-    pixels : [*c]u8
+    pixels : ?[*]u8
 };
 
 pub const GamepadState = extern struct{
@@ -488,7 +488,7 @@ pub fn init() !void{
 }
 
 extern fn glfwTerminate() void;
-extern fn glfwGetError(description: [*c]const u8) c_int;
+extern fn glfwGetError(description: ?[*:0]const u8) c_int;
 
 fn errorCheck() !void{
     var code : c_int = glfwGetError(null);
@@ -528,15 +528,15 @@ pub fn initHint(hint: InitHint, value: bool) void{
 }
 
 extern fn glfwGetVersion(major: *c_int, minor: *c_int, rev: *c_int) void;
-extern fn glfwGetVersionString() [*c]const u8;
+extern fn glfwGetVersionString() [*:0]const u8;
 pub const getVersion = glfwGetVersion;
 pub const getVersionString = glfwGetVersionString;
 
 extern fn glfwSetErrorCallback(callback: ErrorFun) ErrorFun;
 pub const setErrorCallback = glfwSetErrorCallback;
 
-extern fn glfwGetMonitors(count: *c_int) [*]*Monitor;
-pub fn getMonitors(count: *c_int) [*]*Monitor{
+extern fn glfwGetMonitors(count: *c_int) ?[*]*Monitor;
+pub fn getMonitors(count: *c_int) ?[*]*Monitor{
     var res = glfwGetMonitors(count);
     errorCheck2();
     return res;
@@ -573,8 +573,8 @@ pub fn getMonitorContentScale(monitor: ?*Monitor, xscale: ?*f32, yscale: ?*f32) 
     errorCheck2();
 }
 
-extern fn glfwGetMonitorName(monitor: ?*Monitor) [*c]const u8;
-pub fn getMonitorName(monitor: ?*Monitor) []const u8{
+extern fn glfwGetMonitorName(monitor: ?*Monitor) ?[*:0]const u8;
+pub fn getMonitorName(monitor: ?*Monitor) ?[*:0]const u8{
     var res = glfwGetMonitorName(monitor);
     errorCheck2();
     return res;
@@ -600,15 +600,15 @@ pub fn setMonitorCallback(callback: MonitorFun) MonitorFun{
     return res;
 }
 
-extern fn glfwGetVideoModes(monitor: ?*Monitor, count: *c_int) [*c]Vidmode;
-pub fn getVideoModes(monitor: ?*Monitor, count: *c_int) [*c]Vidmode{
+extern fn glfwGetVideoModes(monitor: ?*Monitor, count: *c_int) ?[*]Vidmode;
+pub fn getVideoModes(monitor: ?*Monitor, count: *c_int) ?[*]Vidmode{
     var res = glfwGetVideoModes(monitor, count);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetVideoMode(monitor: ?*Monitor) *Vidmode;
-pub fn getVideoMode(monitor: ?*Monitor) *Vidmode{
+extern fn glfwGetVideoMode(monitor: ?*Monitor) ?*Vidmode;
+pub fn getVideoMode(monitor: ?*Monitor) ?*Vidmode{
     var res = getVideoMode(monitor);
     errorCheck2();
     return res;
@@ -620,8 +620,8 @@ pub fn setGamma(monitor: ?*Monitor, gamma: f32) void{
     errorCheck2();
 }
 
-extern fn glfwGetGammaRamp(monitor: ?*Monitor) *Gammaramp;
-pub fn getGammaRamp(monitor: ?*Monitor) *Gammaramp{
+extern fn glfwGetGammaRamp(monitor: ?*Monitor) ?*Gammaramp;
+pub fn getGammaRamp(monitor: ?*Monitor) ?*Gammaramp{
     var res = glfwGetGammaRamp(monitor);
     errorCheck2();
     return res;
@@ -645,14 +645,14 @@ pub fn windowHint(hint: WindowHint, value: c_int) void{
     errorCheck2();
 }
 
-extern fn glfwWindowHintString(hint: c_int, value: [*c]const u8) void;
-pub fn windowHintString(hint: WindowHint, value: [*c]const u8) void{
+extern fn glfwWindowHintString(hint: c_int, value: [*:0]const u8) void;
+pub fn windowHintString(hint: WindowHint, value: [*:0]const u8) void{
     glfwWindowHintString(@enumToInt(hint), value);
     errorCheck2();
 }
 
-extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*c]const u8, monitor: ?*Monitor, share: ?*Window) ?*Window;
-pub fn createWindow(width: c_int, height: c_int, title: [*c]const u8, monitor: ?*Monitor, share: ?*Window) !*Window{
+extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) ?*Window;
+pub fn createWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window{
     var res = glfwCreateWindow(width, height, title, monitor, share);
     errorCheck2();
     if(res == null){
@@ -680,14 +680,14 @@ pub fn setWindowShouldClose(window: ?*Window, value: bool) void{
     errorCheck2();
 }
 
-extern fn glfwSetWindowTitle(window: ?*Window, title: [*c]const u8) void;
-pub fn setWindowTitle(window: ?*Window, title: []const u8) void{
-    glfwSetWindowTitle(window, @ptrCast([*c]const u8, &title));
+extern fn glfwSetWindowTitle(window: ?*Window, title: [*:0]const u8) void;
+pub fn setWindowTitle(window: ?*Window, title: [*:0]const u8) void{
+    glfwSetWindowTitle(window, title);
     errorCheck2();
 }
 
-extern fn glfwSetWindowIcon(window: ?*Window, count: c_int, images: ?*GLFWimage) void;
-pub fn setWindowIcon(window: ?*Window, count: c_int, images: ?*GLFWimage) void{
+extern fn glfwSetWindowIcon(window: ?*Window, count: c_int, images: ?[*]GLFWimage) void;
+pub fn setWindowIcon(window: ?*Window, count: c_int, images: ?[*]GLFWimage) void{
     glfwSetWindowIcon(window, count, images);
     errorCheck2();
 }
@@ -945,8 +945,8 @@ pub fn rawMouseMotionSupported() bool{
 }
 
 const std = @import("std");
-extern fn glfwGetKeyName(key: c_int, scancode: c_int) [*c]const u8;
-pub fn getKeyName(key: Key, scancode: c_int) []const u8{
+extern fn glfwGetKeyName(key: c_int, scancode: c_int) ?[*:0]const u8;
+pub fn getKeyName(key: Key, scancode: c_int) ?[:0]const u8{
     var res = glfwGetKeyName(@enumToInt(key), scancode);
     errorCheck2();
     return std.mem.spanZ(res);
@@ -1068,35 +1068,35 @@ pub fn joystickPresent(jid: c_int) bool{
     return res != 0;
 }
 
-extern fn glfwGetJoystickAxes(jid: c_int, count: *c_int) [*c]const f32;
-pub fn getJoystickAxes(jid: c_int, count: *c_int) [*c]const f32{
+extern fn glfwGetJoystickAxes(jid: c_int, count: *c_int) ?[*]const f32;
+pub fn getJoystickAxes(jid: c_int, count: *c_int) ?[*]const f32{
     var res = glfwGetJoystickAxes(jid, count);
     errorCheck2();
 }
 
-extern fn glfwGetJoystickButtons(jid: c_int, count: *c_int) [*c]const u8;
-pub fn getJoystickButtons(jid: c_int, count: *c_int) [*c]const u8{
+extern fn glfwGetJoystickButtons(jid: c_int, count: *c_int) ?[*]const u8;
+pub fn getJoystickButtons(jid: c_int, count: *c_int) ?[*]const u8{
     var res = glfwGetJoystickButtons(jid, count);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetJoystickHats(jid: c_int, count: *c_int)  [*c]const u8;
-pub fn getJoystickHats(jid: c_int, count: *c_int) [*c]const u8{
+extern fn glfwGetJoystickHats(jid: c_int, count: *c_int)  ?[*]const u8;
+pub fn getJoystickHats(jid: c_int, count: *c_int) ?[*]const u8{
     var res = glfwGetJoystickHats(jid, count);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetJoystickName(jid: c_int) [*c]const u8;
-pub fn getJoystickName(jid: c_int) [*c]const u8{
+extern fn glfwGetJoystickName(jid: c_int) ?[*:0]const u8;
+pub fn getJoystickName(jid: c_int) ?[*:0]const u8{
     var res = glfwGetJoystickName(jid);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetJoystickGUID(jid: c_int) [*c]const u8;
-pub fn getJoystickGUID(jid: c_int) [*c]const u8{
+extern fn glfwGetJoystickGUID(jid: c_int) ?[*:0]const u8;
+pub fn getJoystickGUID(jid: c_int) ?[*:0]const u8{
     var res = glfwGetJoystickGUID(jid);
     errorCheck2();
     return res;
@@ -1130,15 +1130,15 @@ pub fn setJoystickCallback(callback: JoystickFun) JoystickFun{
     return res;
 }
 
-extern fn glfwUpdateGamepadMappings(string: [*c]const u8) c_int;
-pub fn updateGamepadMappings(string: []u8) c_int{
-    var res = glfwUpdateGamepadMappings( @ptrCast([*c]const u8, &string));
+extern fn glfwUpdateGamepadMappings(string: [*:0]const u8) c_int;
+pub fn updateGamepadMappings(string: [*:0]const u8) c_int{
+    var res = glfwUpdateGamepadMappings(string);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetGamepadName(jid: c_int) [*c]const u8;
-pub fn getGamepadName(jid: c_int) [*c]const u8{
+extern fn glfwGetGamepadName(jid: c_int) ?[*:0]const u8;
+pub fn getGamepadName(jid: c_int) ?[*:0]const u8{
     var res = glfwGetGamepadName(jid);
     errorCheck2();
     return res;
@@ -1151,14 +1151,14 @@ pub fn getGamepadState(jid: c_int, state: ?*GamepadState) c_int{
     return res;
 }
 
-extern fn glfwSetClipboardString(window: ?*Window, string: [*c]const u8) void;
-pub fn setClipboardString(window: ?*Window, string: []const u8) void{
-    glfwSetClipboardString(window, @ptrCast([*c]const u8, &string));
+extern fn glfwSetClipboardString(window: ?*Window, string: [*:0]const u8) void;
+pub fn setClipboardString(window: ?*Window, string: [*:0]const u8) void{
+    glfwSetClipboardString(window, string);
     errorCheck2();
 }
 
-extern fn glfwGetClipboardString(window: ?*Window) [*c]const u8;
-pub fn getClipboardString(window: ?*Window) []const u8{
+extern fn glfwGetClipboardString(window: ?*Window) ?[*:0]const u8;
+pub fn getClipboardString(window: ?*Window) ?[:0]const u8{
     var res = glfwGetClipboardString(window);
     errorCheck2();
     return std.mem.spanZ(res);
@@ -1218,15 +1218,15 @@ pub fn swapInterval(interval: c_int) void{
 }
 
 //GL Stuff
-extern fn glfwExtensionSupported(extension: [*c]const u8) c_int;
-pub fn extensionSupported(extension: []const u8) c_int{
+extern fn glfwExtensionSupported(extension: [*:0]const u8) c_int;
+pub fn extensionSupported(extension: [*:0]const u8) c_int{
     var res = glfwExtensionSupported(extension);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetProcAddress(procname: [*c]const u8) GLproc;
-pub fn getProcAddress(procname: []const u8) GLproc{
+extern fn glfwGetProcAddress(procname: [*:0]const u8) GLproc;
+pub fn getProcAddress(procname: [*:0]const u8) GLproc{
     var res = glfwGetProcAddress(procname);
     errorCheck2();
     return res;
@@ -1243,8 +1243,8 @@ pub fn vulkanSupported() bool{
     return res != 0;
 }
 
-extern fn glfwGetRequiredInstanceExtensions(count: *u32) [][*c]const u8;
-pub fn getRequiredInstanceExtensions(count: *u32) [][*c]const u8{
+extern fn glfwGetRequiredInstanceExtensions(count: *u32) ?[*][*:0]const u8;
+pub fn getRequiredInstanceExtensions(count: *u32) ?[*][*:0]const u8{
     var res = glfwGetRequiredInstanceExtensions(count);
     errorCheck2();
     return res;
