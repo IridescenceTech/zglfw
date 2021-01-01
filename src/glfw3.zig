@@ -412,8 +412,8 @@ pub const InitHint = extern enum(c_int){
     CocoaMenubar          = 0x00051002,
 };
 
-pub const GLproc = fn(void) void;
-pub const VKproc = fn(void) void;
+pub const GLproc = fn () callconv(.C) void;
+pub const VKproc = fn () callconv(.C) void;
 
 pub const Monitor = c_long;
 pub const Window = c_long;
