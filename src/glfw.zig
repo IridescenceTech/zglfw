@@ -818,7 +818,7 @@ pub fn setWindowAttrib(window: ?*Window, attrib: WindowHint, value: c_int) !void
 }
 
 extern fn glfwSetWindowUserPointer(window: ?*Window, pointer: *c_void) void;
-pub fn setWindowUserPointer(window: ?*Window, pointer: *c_void) void{
+pub fn setWindowUserPointer(window: ?*Window, pointer: *c_void) !void{
     glfwSetWindowUserPointer(window, pointer);
     try errorCheck();
 }
