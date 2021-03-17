@@ -1,0 +1,14 @@
+pkgs:
+  zglfw:
+    version: 1.0.0
+    description: "A thin, idiomatic wrapper for GLFW. Written in Zig, for Zig!"
+    license: MIT
+    source_url: "https://github.com/Iridescence-Technologies/zglfw"
+    tags:
+      glfw
+      opengl
+
+    root: src/main.zig
+    files:
+      README.md
+      LICENSE
