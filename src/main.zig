@@ -1,4 +1,5 @@
-const glfw = @import("glfw.zig");
+pub const glfw = @import("glfw.zig");
+pub const glfw3 = @import("glfw3.zig");
 const std = @import("std");
 
 pub fn main() !void {
