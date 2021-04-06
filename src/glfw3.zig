@@ -511,7 +511,7 @@ fn errorCheck() !void{
 fn errorCheck2() void{
     const r = errorCheck() catch |err|{
         if(err != GLFWError.NoError){
-            std.debug.warn("error: {}\n", .{@errorName(err)});
+            std.debug.warn("error: {s}\n", .{@errorName(err)});
         }
     };
 }
