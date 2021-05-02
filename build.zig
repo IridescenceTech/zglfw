@@ -18,10 +18,6 @@ pub fn build(b: *Builder) void {
     //Note - this is linking on windows - change for your needs!
     exe.linkSystemLibrary("glfw3");
     exe.linkSystemLibrary("c");
-    exe.linkSystemLibrary("opengl32");
-    exe.linkSystemLibrary("user32");
-    exe.linkSystemLibrary("gdi32");
-    exe.linkSystemLibrary("shell32");
     exe.install();
 
     const run_cmd = exe.run();
