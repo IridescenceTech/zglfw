@@ -8,7 +8,7 @@ pkgs:
       glfw
       opengl
 
-    root: src/main.zig
+    root: src/zglfw.zig
     files:
       README.md
       LICENSE
