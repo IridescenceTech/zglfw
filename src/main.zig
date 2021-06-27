@@ -1070,8 +1070,9 @@ pub fn joystickPresent(jid: c_int) bool{
 
 extern fn glfwGetJoystickAxes(jid: c_int, count: *c_int) ?[*]const f32;
 pub fn getJoystickAxes(jid: c_int, count: *c_int) ?[*]const f32{
-    _ = glfwGetJoystickAxes(jid, count);
+    var res = glfwGetJoystickAxes(jid, count);
     errorCheck2();
+    return res;
 }
 
 extern fn glfwGetJoystickButtons(jid: c_int, count: *c_int) ?[*]const u8;
