@@ -50,13 +50,13 @@ pub const VersionMajor = 3;
 pub const VersionMinor = 3;
 pub const VersionRevision = 2;
 
-pub const KeyState = extern enum(c_int){
+pub const KeyState = enum(c_int){
     Release = 0,
     Press = 1,
     Repeat = 2
 };
 
-pub const JoystickHat = extern enum(c_int){
+pub const JoystickHat = enum(c_int){
     Centered   = 0,
     Up         = 1,
     Right      = 2,
@@ -68,7 +68,7 @@ pub const JoystickHat = extern enum(c_int){
     Leftdown  = (8  | 4),
 };
 
-pub const Key = extern enum(c_int){
+pub const Key = enum(c_int){
     Unknown           = -1,
     Space             = 32,
     Apostrophe        = 39,
@@ -193,7 +193,7 @@ pub const Key = extern enum(c_int){
     Last              = 348,
 };
 
-pub const Modifiers = extern enum(c_int){
+pub const Modifiers = enum(c_int){
     Shift     = 0x0001,
     Control   = 0x0002,
     Alt       = 0x0004,
@@ -202,7 +202,7 @@ pub const Modifiers = extern enum(c_int){
     NumLock   = 0x0020,
 };
 
-pub const Mouse = extern enum(c_int){
+pub const Mouse = enum(c_int){
     Button1         = 0,
     Button2         = 1,
     Button3         = 2,
@@ -217,7 +217,7 @@ pub const Mouse = extern enum(c_int){
     ButtonMiddle    = 2
 };
 
-pub const Joystick = extern enum(c_int){
+pub const Joystick = enum(c_int){
     Button1             = 0,
     Button2             = 1,
     Button3             = 2,
@@ -237,7 +237,7 @@ pub const Joystick = extern enum(c_int){
     ButtonLast          = 15,
 };
 
-pub const GamepadButton = extern enum(c_int){
+pub const GamepadButton = enum(c_int){
     A               = 0,
     B               = 1,
     X               = 2,
@@ -260,7 +260,7 @@ pub const GamepadButton = extern enum(c_int){
     Triangle        = 3,
 };
 
-pub const GamepadAxis = extern enum(c_int){
+pub const GamepadAxis = enum(c_int){
     LeftX        = 0,
     LeftY        = 1,
     RightX       = 2,
@@ -284,7 +284,7 @@ pub const GLFWError = error{
     NoError
 };
 
-pub const ErrorCode = extern enum(c_int){
+pub const ErrorCode = enum(c_int){
     NotInitialized = 0x00010001,
     NoCurrentContext = 0x00010002,
     InvalidEnum = 0x00010003,
@@ -298,7 +298,7 @@ pub const ErrorCode = extern enum(c_int){
     NoError = 0,
 };
 
-pub const WindowHint = extern enum(c_int){
+pub const WindowHint = enum(c_int){
     Focused                  = 0x00020001,
     Iconified                = 0x00020002,
     Resizable                = 0x00020003,
@@ -346,25 +346,25 @@ pub const WindowHint = extern enum(c_int){
     X11InstanceName        = 0x00024002,
 };
 
-pub const APIAttribute = extern enum(c_int){
+pub const APIAttribute = enum(c_int){
     NoAPI                 =          0,
     OpenGLAPI             = 0x00030001,
     OpenGLESAPI          = 0x00030002,
 };
 
-pub const RobustnessAttribute = extern enum(c_int){
+pub const RobustnessAttribute = enum(c_int){
     NoRobustness          =          0,
     NoResetNotification  = 0x00031001,
     LoseContextOnReset  = 0x00031002,
 };
 
-pub const GLProfileAttribute = extern enum(c_int){
+pub const GLProfileAttribute = enum(c_int){
     OpenglAnyProfile     =          0,
     OpenglCoreProfile    = 0x00032001,
     OpenglCompatProfile  = 0x00032002,
 };
 
-pub const InputMode = extern enum(c_int){
+pub const InputMode = enum(c_int){
     Cursor                 = 0x00033001,
     StickyKeys            = 0x00033002,
     StickyMouseButtons   = 0x00033003,
@@ -372,19 +372,19 @@ pub const InputMode = extern enum(c_int){
     RawMouseMotion       = 0x00033005,
 };
 
-pub const CursorVisibilityAttribute = extern enum(c_int){
+pub const CursorVisibilityAttribute = enum(c_int){
     CursorNormal          = 0x00034001,
     CursorHidden          = 0x00034002,
     CursorDisabled        = 0x00034003,
 };
 
-pub const ReleaseBehaviorAttribute = extern enum(c_int){
+pub const ReleaseBehaviorAttribute = enum(c_int){
     AnyReleaseBehavior   =          0,
     ReleaseBehaviorFlush = 0x00035001,
     ReleaseBehaviorNone  = 0x00035002,
 };
 
-pub const ContextAPIAttribute = extern enum(c_int){      
+pub const ContextAPIAttribute = enum(c_int){      
     NativeContextAPI     = 0x00036001,
     EGLContextAPI        = 0x00036002,
     OSMesaContextAPI     = 0x00036003,
@@ -392,7 +392,7 @@ pub const ContextAPIAttribute = extern enum(c_int){
 
 pub const DontCare : c_int = -1;
 
-pub const CursorShape = extern enum(c_int){
+pub const CursorShape = enum(c_int){
     Arrow           = 0x00036001,
     IBeam           = 0x00036002,
     Crosshair       = 0x00036003,
@@ -401,12 +401,12 @@ pub const CursorShape = extern enum(c_int){
     VResize         = 0x00036006,  
 };
 
-pub const Connection = extern enum(c_int){
+pub const Connection = enum(c_int){
     Connected              = 0x00040001,
     Disconnected           = 0x00040002,
 };
 
-pub const InitHint = extern enum(c_int){
+pub const InitHint = enum(c_int){
     JoystickHatButtons   = 0x00050001,
     CocoaChdirResources  = 0x00051001,
     CocoaMenubar          = 0x00051002,
@@ -509,7 +509,7 @@ fn errorCheck() !void{
 }
 
 fn errorCheck2() void{
-    const r = errorCheck() catch |err|{
+    errorCheck() catch |err|{
         if(err != GLFWError.NoError){
             std.debug.warn("error: {s}\n", .{@errorName(err)});
         }
@@ -1072,6 +1072,7 @@ extern fn glfwGetJoystickAxes(jid: c_int, count: *c_int) ?[*]const f32;
 pub fn getJoystickAxes(jid: c_int, count: *c_int) ?[*]const f32{
     var res = glfwGetJoystickAxes(jid, count);
     errorCheck2();
+    return res;
 }
 
 extern fn glfwGetJoystickButtons(jid: c_int, count: *c_int) ?[*]const u8;
