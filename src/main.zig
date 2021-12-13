@@ -440,14 +440,14 @@ pub const ScrollFun = fn(window: *Window, xoffset: f64, yoffset: f64) callconv(.
 
 //Mods is bitfield of modifiers, keys is enum of keys, and action is enum of keystates.
 pub const KeyFun = fn (window: *Window, key: c_int, scancode: c_int, action: c_int, mods: c_int) callconv(.C) void;
-pub const Charfun = fn (window: *Window,codepoint: c_uint) callconv(.C) void;
+pub const CharFun = fn (window: *Window,codepoint: c_uint) callconv(.C) void;
 
 //Mods refers to the bitfield of Modifiers
 pub const CharmodsFun = fn (window: *Window,codepoint: c_uint, mods: c_int) callconv(.C) void;
 pub const DropFun = fn (window: *Window, path_count: c_int, paths: [*:0]const u8) callconv(.C) void;
 
 //Event is one of two states defined by the enum 'Connection'
-pub const Monitorfun = fn (monitor : *Monitor, event : c_int) callconv(.C) void;
+pub const MonitorFun = fn (monitor : *Monitor, event : c_int) callconv(.C) void;
 
 //Event is one of two states defined by the enum 'Connection'
 pub const JoystickFun = fn(id: c_int, event: c_int) callconv(.C) void;
@@ -686,8 +686,8 @@ pub fn setWindowTitle(window: ?*Window, title: [*:0]const u8) void{
     errorCheck2();
 }
 
-extern fn glfwSetWindowIcon(window: ?*Window, count: c_int, images: ?[*]GLFWimage) void;
-pub fn setWindowIcon(window: ?*Window, count: c_int, images: ?[*]GLFWimage) void{
+extern fn glfwSetWindowIcon(window: ?*Window, count: c_int, images: ?[*]Image) void;
+pub fn setWindowIcon(window: ?*Window, count: c_int, images: ?[*]Image) void{
     glfwSetWindowIcon(window, count, images);
     errorCheck2();
 }
@@ -1200,7 +1200,7 @@ pub fn makeContextCurrent(window: ?*Window) void{
 }
 
 extern fn glfwGetCurrentContext() ?*Window;
-pub fn getCurrentContext() ?*Window{
+pub fn getCurrentContext(window: ?*Window) ?*Window{
     var res = glfwGetCurrentContext(window);
     errorCheck2();
     return res;
