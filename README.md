@@ -11,28 +11,28 @@ zGLFW is NOT 100% tested. I am happy to fix any errors that may arise, and I wil
 
 Without error unions:
 ```zig
-const glfw = @import("glfw3.zig");
+const glfw = @import("main.zig");
 const std = @import("std");
 
 pub fn main() !void {
-    var major : i32 = 0;
-    var minor : i32 = 0;
-    var rev : i32 = 0;
+    var major: i32 = 0;
+    var minor: i32 = 0;
+    var rev: i32 = 0;
 
     glfw.getVersion(&major, &minor, &rev);
-    std.debug.warn("GLFW {}.{}.{}\n",.{major, minor, rev}); 
+    std.debug.print("GLFW {}.{}.{}\n", .{ major, minor, rev });
 
     //Example of something that fails with GLFW_NOT_INITIALIZED - but will continue with execution
     //var monitor : ?*glfw.Monitor = glfw.getPrimaryMonitor();
 
     try glfw.init();
     defer glfw.terminate();
-    std.debug.warn("GLFW Init Succeeded.\n", .{});
-    
-    var window : *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
+    std.debug.print("GLFW Init Succeeded.\n", .{});
 
-    while(!glfw.windowShouldClose(window)){
-        if(glfw.getKey(window, glfw.Key.Escape) == glfw.KeyState.Press){
+    var window: *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
+
+    while (!glfw.windowShouldClose(window)) {
+        if (glfw.getKey(window, glfw.KeyEscape) == glfw.Press) {
             glfw.setWindowShouldClose(window, true);
         }
 
@@ -43,28 +43,28 @@ pub fn main() !void {
 
 With error unions:
 ```zig
-const glfw = @import("glfw.zig");
+const glfw = @import("main.zig");
 const std = @import("std");
 
 pub fn main() !void {
-    var major : i32 = 0;
-    var minor : i32 = 0;
-    var rev : i32 = 0;
+    var major: i32 = 0;
+    var minor: i32 = 0;
+    var rev: i32 = 0;
 
     glfw.getVersion(&major, &minor, &rev);
-    std.debug.warn("GLFW {}.{}.{}\n",.{major, minor, rev}); 
+    std.debug.print("GLFW {}.{}.{}\n", .{ major, minor, rev });
 
     //Example of something that fails with GLFW_NOT_INITIALIZED - but will crash out.
     //var monitor = try glfw.getPrimaryMonitor();
 
     try glfw.init();
     defer glfw.terminate() catch unreachable;
-    std.debug.warn("GLFW Init Succeeded.\n", .{});
+    std.debug.print("GLFW Init Succeeded.\n", .{});
 
-    var window : *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
+    var window: *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
 
-    while(!try glfw.windowShouldClose(window)){       
-        if((try glfw.getKey(window, glfw.Key.Escape)) == glfw.KeyState.Press){
+    while (!try glfw.windowShouldClose(window)) {
+        if ((try glfw.getKey(window, glfw.Key.Escape)) == glfw.KeyState.Press) {
             try glfw.setWindowShouldClose(window, true);
         }
 
@@ -75,4 +75,4 @@ pub fn main() !void {
 
 # Documentation
 
-I would suggest you look into the `glfw.zig` files themselves, as most of the changes are simple syntactically, but I have made some comments in cases where it may be different than you expect. Obviously [GLFW's Documentation](https://www.glfw.org/documentation.html) should cover most things that you want to know.
+I would suggest you look into the `main.zig` files themselves, as most of the changes are simple syntactically, but I have made some comments in cases where it may be different than you expect. Obviously [GLFW's Documentation](https://www.glfw.org/documentation.html) should cover most things that you want to know.

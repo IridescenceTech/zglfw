@@ -8,7 +8,20 @@ pub fn build(b: *Builder) void {
     lib.setBuildMode(mode);
 
     // tested only on linux!!
-    lib.linkSystemLibrary("glfw3");
+    lib.linkSystemLibrary("glfw");
     lib.linkSystemLibrary("c");
     lib.install();
+
+    const exe = b.addExecutable("sample", "src/sample.zig");
+    exe.setTarget(target);
+    exe.setBuildMode(mode);
+
+    exe.linkLibrary(lib);
+    exe.install();
+
+    const run_cmd = exe.run();
+    run_cmd.step.dependOn(b.getInstallStep());
+
+    const run_step = b.step("run", "Run the app");
+    run_step.dependOn(&run_cmd.step);
 }
