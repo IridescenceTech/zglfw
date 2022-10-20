@@ -580,14 +580,14 @@ pub fn getMonitorName(monitor: ?*Monitor) ?[*:0]const u8{
     return res;
 }
 
-extern fn glfwSetMonitorUserPointer(monitor: ?*Monitor, pointer: ?*c_void) void;
-pub fn setMonitorUserPointer(monitor: ?*Monitor, pointer: ?*c_void) void{
+extern fn glfwSetMonitorUserPointer(monitor: ?*Monitor, pointer: ?*anyopaque) void;
+pub fn setMonitorUserPointer(monitor: ?*Monitor, pointer: ?*anyopaque) void{
     glfwSetMonitorUserPointer(monitor, pointer);
     errorCheck2();
 }
 
-extern fn glfwGetMonitorUserPointer(monitor: ?*Monitor) ?*c_void;
-pub fn getMonitorUserPointer(monitor: ?*Monitor) ?*c_void{
+extern fn glfwGetMonitorUserPointer(monitor: ?*Monitor) ?*anyopaque;
+pub fn getMonitorUserPointer(monitor: ?*Monitor) ?*anyopaque{
     var res = glfwGetMonitorUserPointer(monitor);
     errorCheck2();
     return res;
@@ -827,14 +827,14 @@ pub fn setWindowAttrib(window: ?*Window, attrib: WindowHint, value: c_int) void{
     errorCheck2();
 }
 
-extern fn glfwSetWindowUserPointer(window: ?*Window, pointer: *c_void) void;
-pub fn setWindowUserPointer(window: ?*Window, pointer: *c_void) void{
+extern fn glfwSetWindowUserPointer(window: ?*Window, pointer: *anyopaque) void;
+pub fn setWindowUserPointer(window: ?*Window, pointer: *anyopaque) void{
     glfwSetWindowUserPointer(window, pointer);
     errorCheck2();
 }
 
-extern fn glfwGetWindowUserPointer(window: ?*Window) ?*c_void;
-pub fn getWindowUserPointer(window: ?*Window) ?*c_void{
+extern fn glfwGetWindowUserPointer(window: ?*Window) ?*anyopaque;
+pub fn getWindowUserPointer(window: ?*Window) ?*anyopaque{
     var res = glfwGetWindowUserPointer(window);
     errorCheck2();
     return res;
@@ -1103,15 +1103,15 @@ pub fn getJoystickGUID(jid: c_int) ?[*:0]const u8{
     return res;
 }
 
-extern fn glfwSetJoystickUserPointer(jid: c_int, pointer: *c_void) void;
-pub fn setJoystickUserPointer(jid: c_int, pointer: *c_void) void{
+extern fn glfwSetJoystickUserPointer(jid: c_int, pointer: *anyopaque) void;
+pub fn setJoystickUserPointer(jid: c_int, pointer: *anyopaque) void{
     var res = glfwSetJoystickUserPointer(jid, pointer);
     errorCheck2();
     return res;
 }
 
-extern fn glfwGetJoystickUserPointer(jid: c_int) *c_void;
-pub fn getJoystickUserPointer(jid: c_int) *c_void{
+extern fn glfwGetJoystickUserPointer(jid: c_int) *anyopaque;
+pub fn getJoystickUserPointer(jid: c_int) *anyopaque{
     var res = getJoystickUserPointer(jid);
     errorCheck2();
     return res;
@@ -1226,8 +1226,8 @@ pub fn extensionSupported(extension: [*:0]const u8) c_int{
     return res;
 }
 
-extern fn glfwGetProcAddress(procname: [*:0]const u8) GLproc;
-pub fn getProcAddress(procname: [*:0]const u8) GLproc{
+extern fn glfwGetProcAddress(procname: [*:0]const u8) ?GLproc;
+pub fn getProcAddress(procname: [*:0]const u8) ?GLproc{
     var res = glfwGetProcAddress(procname);
     errorCheck2();
     return res;
