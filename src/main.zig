@@ -461,7 +461,7 @@ fn errorCheck() !void {
         FormatUnavailable => GLFWError.FormatUnavailable,
         NoWindowContext => GLFWError.NoWindowContext,
         NoError => GLFWError.NoError,
-        else => GLFWError.NoError
+        else => GLFWError.NoError,
     };
     return err;
 }
@@ -481,7 +481,7 @@ pub fn terminate() void {
 
 extern fn glfwInitHint(hint: c_int, value: c_int) void;
 pub fn initHint(hint: InitHint, value: bool) void {
-    glfwInitHint((hint), @boolToInt(value));
+    glfwInitHint((hint), @intFromBool(value));
     errorCheck2();
 }
 
@@ -634,7 +634,7 @@ pub fn windowShouldClose(window: ?*Window) bool {
 
 extern fn glfwSetWindowShouldClose(window: ?*Window, value: c_int) void;
 pub fn setWindowShouldClose(window: ?*Window, value: bool) void {
-    glfwSetWindowShouldClose(window, @boolToInt(value));
+    glfwSetWindowShouldClose(window, @intFromBool(value));
     errorCheck2();
 }
 
