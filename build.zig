@@ -1,25 +1,31 @@
-const Builder = @import("std").build.Builder;
+const std = @import("std");
 
-pub fn build(b: *Builder) void {
+pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-    const mode = b.standardReleaseOptions();
-    const lib = b.addStaticLibrary("zglfw", "src/main.zig");
-    lib.setTarget(target);
-    lib.setBuildMode(mode);
+    const optimize = b.standardOptimizeOption(.{});
+    const lib = b.addStaticLibrary(.{
+        .name = "zglfw",
+        .root_source_file = . { .path = "src/main.zig" },
+        .target = target,
+        .optimize = optimize
+    });
 
     // tested only on linux!!
     lib.linkSystemLibrary("glfw");
     lib.linkSystemLibrary("c");
-    lib.install();
+    b.installArtifact(lib);
 
-    const exe = b.addExecutable("sample", "src/sample.zig");
-    exe.setTarget(target);
-    exe.setBuildMode(mode);
+    const exe = b.addExecutable(.{
+        .name = "sample",
+        .root_source_file = .{ .path = "src/sample.zig" },
+        .target = target,
+        .optimize = optimize,
+    });
 
     exe.linkLibrary(lib);
-    exe.install();
+    b.installArtifact(exe);
 
-    const run_cmd = exe.run();
+    const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
 
     const run_step = b.step("run", "Run the app");
