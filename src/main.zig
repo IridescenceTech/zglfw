@@ -45,6 +45,7 @@
 //
 //3. This Notice May Not Be Removed Or Altered From Any Source
 //   Distribution.
+const builtin = @import("builtin");
 
 pub const VersionMajor = 3;
 pub const VersionMinor = 3;
@@ -362,6 +363,94 @@ pub const NativeContextAPI: ContextAPIAttribute = 0x00036001;
 pub const EGLContextAPI: ContextAPIAttribute = 0x00036002;
 pub const OSMesaContextAPI: ContextAPIAttribute = 0x00036003;
 
+pub const VkInstance = usize;
+pub const VkPhysicalDevice = usize;
+pub const VkSurfaceKHR = u64;
+pub const VkResult = enum(i32) {
+    success = 0,
+    not_ready = 1,
+    timeout = 2,
+    event_set = 3,
+    event_reset = 4,
+    incomplete = 5,
+    error_out_of_host_memory = -1,
+    error_out_of_device_memory = -2,
+    error_initialization_failed = -3,
+    error_device_lost = -4,
+    error_memory_map_failed = -5,
+    error_layer_not_present = -6,
+    error_extension_not_present = -7,
+    error_feature_not_present = -8,
+    error_incompatible_driver = -9,
+    error_too_many_objects = -10,
+    error_format_not_supported = -11,
+    error_fragmented_pool = -12,
+    error_unknown = -13,
+    error_out_of_pool_memory = -1000069000,
+    error_invalid_external_handle = -1000072003,
+    error_fragmentation = -1000161000,
+    error_invalid_opaque_capture_address = -1000257000,
+    pipeline_compile_required = 1000297000,
+    error_surface_lost_khr = -1000000000,
+    error_native_window_in_use_khr = -1000000001,
+    suboptimal_khr = 1000001003,
+    error_out_of_date_khr = -1000001004,
+    error_incompatible_display_khr = -1000003001,
+    error_validation_failed_ext = -1000011001,
+    error_invalid_shader_nv = -1000012000,
+    error_image_usage_not_supported_khr = -1000023000,
+    error_video_picture_layout_not_supported_khr = -1000023001,
+    error_video_profile_operation_not_supported_khr = -1000023002,
+    error_video_profile_format_not_supported_khr = -1000023003,
+    error_video_profile_codec_not_supported_khr = -1000023004,
+    error_video_std_version_not_supported_khr = -1000023005,
+    error_invalid_drm_format_modifier_plane_layout_ext = -1000158000,
+    error_not_permitted_khr = -1000174001,
+    error_full_screen_exclusive_mode_lost_ext = -1000255000,
+    thread_idle_khr = 1000268000,
+    thread_done_khr = 1000268001,
+    operation_deferred_khr = 1000268002,
+    operation_not_deferred_khr = 1000268003,
+    error_invalid_video_std_parameters_khr = -1000299000,
+    error_compression_exhausted_ext = -1000338000,
+    error_incompatible_shader_binary_ext = 1000482000,
+    _,
+};
+
+pub const VkSystemAllocationScope = enum(i32) {
+    command = 0,
+    object = 1,
+    cache = 2,
+    device = 3,
+    instance = 4,
+    _,
+};
+
+pub const VkInternalAllocationType = enum(i32) {
+    executable = 0,
+    _,
+};
+
+pub const vulkan_call_conv: std.builtin.CallingConvention = if (builtin.os.tag == .windows and builtin.cpu.arch == .x86)
+    .Stdcall
+else if (builtin.abi == .android and (builtin.cpu.arch.isARM() or builtin.cpu.arch.isThumb()) and std.Target.arm.featureSetHas(builtin.cpu.features, .has_v7) and builtin.cpu.arch.ptrBitWidth() == 32)
+    // On Android 32-bit ARM targets, Vulkan functions use the "hardfloat"
+    // calling convention, i.e. float parameters are passed in registers. This
+    // is true even if the rest of the application passes floats on the stack,
+    // as it does by default when compiling for the armeabi-v7a NDK ABI.
+    .AAPCSVFP
+else
+    .C;
+
+pub const VkAllocationCallbacks = extern struct {
+    p_user_data: ?*anyopaque = null,
+    pfn_allocation: ?*const fn (p_user_data: ?*anyopaque, size: usize, alignment: usize, allocation_scope: VkSystemAllocationScope) callconv(vulkan_call_conv) ?*anyopaque,
+    pfn_reallocation: ?*const fn (p_user_data: ?*anyopaque, p_original: ?*anyopaque, size: usize, alignment: usize, allocation_scope: VkSystemAllocationScope) callconv(vulkan_call_conv) ?*anyopaque,
+    pfn_free: ?*const fn (p_user_data: ?*anyopaque, p_memory: ?*anyopaque) callconv(vulkan_call_conv) void,
+    pfn_internal_allocation: ?*const fn (p_user_data: ?*anyopaque, size: usize, allocation_type: VkInternalAllocationType, allocation_scope: VkSystemAllocationScope) callconv(vulkan_call_conv) void = null,
+    pfn_internal_free: ?*const fn (p_user_data: ?*anyopaque, size: usize, allocation_type: VkInternalAllocationType, allocation_scope: VkSystemAllocationScope) callconv(vulkan_call_conv) void = null,
+};
+
 pub const DontCare: c_int = -1;
 
 pub const CursorShape = c_int;
@@ -381,8 +470,8 @@ pub const JoystickHatButtons: InitHint = 0x00050001;
 pub const CocoaChdirResources: InitHint = 0x00051001;
 pub const CocoaMenubar: InitHint = 0x00051002;
 
-pub const GLproc = fn () callconv(.C) void;
-pub const VKproc = fn () callconv(.C) void;
+pub const GLproc = *const fn () callconv(.C) void;
+pub const VKproc = *const fn () callconv(.C) void;
 
 pub const Monitor = c_long;
 pub const Window = c_long;
@@ -1190,9 +1279,27 @@ pub fn getProcAddress(procname: [*:0]const u8) ?GLproc {
 }
 
 //Vulkan stuff
-//extern fn GLFWvkproc glfwGetInstanceProcAddress(VkInstance instance, const char* procname);
-//extern fn int glfwGetPhysicalDevicePresentationSupport(VkInstance instance, VkPhysicalDevice device, uint32_t queuefamily);
-//extern fn VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window, const VkAllocationCallbacks* allocator, VkSurfaceKHR* surface);
+extern fn glfwGetInstanceProcAddress(instance: VkInstance, procname: [*:0]const u8) ?VKproc;
+pub fn getInstanceProcAddress(instance: VkInstance, procname: [*:0]const u8) ?VKproc {
+    var res = glfwGetInstanceProcAddress(instance, procname);
+    errorCheck2();
+    return res;
+}
+
+extern fn glfwGetPhysicalDevicePresentationSupport(instance: VkInstance, device: VkPhysicalDevice, queuefamily: u32) c_int;
+pub fn getPhysicalDevicePresentationSupport(instance: VkInstance, device: VkPhysicalDevice, queuefamily: u32) bool {
+    var res = glfwGetPhysicalDevicePresentationSupport(instance, device, queuefamily);
+    errorCheck2();
+    return res != 0;
+}
+
+extern fn glfwCreateWindowSurface(instance: VkInstance, window: *Window, allocator: ?*const VkAllocationCallbacks, surface: *VkSurfaceKHR) VkResult;
+pub fn createWindowSurface(instance: VkInstance, window: *Window, allocator: ?*const VkAllocationCallbacks, surface: *VkSurfaceKHR) VkResult {
+    var res = glfwCreateWindowSurface(instance, window, allocator, surface);
+    errorCheck2();
+    return res;
+}
+
 extern fn glfwVulkanSupported() c_int;
 pub fn vulkanSupported() bool {
     var res = glfwVulkanSupported();
