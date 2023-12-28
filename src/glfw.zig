@@ -337,9 +337,9 @@ pub const NoResetNotification: RobustnessAttribute = 0x00031001;
 pub const LoseContextOnReset: RobustnessAttribute = 0x00031002;
 
 pub const GLProfileAttribute = c_int;
-pub const OpenglAnyProfile: GLProfileAttribute = 0;
-pub const OpenglCoreProfile: GLProfileAttribute = 0x00032001;
-pub const OpenglCompatProfile: GLProfileAttribute = 0x00032002;
+pub const OpenGLAnyProfile: GLProfileAttribute = 0;
+pub const OpenGLCoreProfile: GLProfileAttribute = 0x00032001;
+pub const OpenGLCompatProfile: GLProfileAttribute = 0x00032002;
 
 pub const InputMode = c_int;
 pub const Cursor: InputMode = 0x00033001;
