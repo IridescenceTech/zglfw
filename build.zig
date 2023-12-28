@@ -5,14 +5,12 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const lib = b.addStaticLibrary(.{
         .name = "zglfw",
-        .root_source_file = . { .path = "src/main.zig" },
+        .root_source_file = .{ .path = "src/glfw.zig" },
         .target = target,
-        .optimize = optimize
+        .optimize = optimize,
     });
-
-    // tested only on linux!!
+    lib.linkLibC();
     lib.linkSystemLibrary("glfw");
-    lib.linkSystemLibrary("c");
     b.installArtifact(lib);
 
     const exe = b.addExecutable(.{
@@ -21,8 +19,10 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-
     exe.linkLibrary(lib);
+
+    const glfw = b.addModule("glfw", .{ .source_file = .{ .path = "src/glfw.zig" } });
+    exe.addModule("glfw", glfw);
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);

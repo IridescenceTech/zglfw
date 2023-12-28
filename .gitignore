@@ -34,3 +34,5 @@
 zig-cache
 deps.zig
 gyro.lock
+
+zig-out
