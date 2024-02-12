@@ -21,8 +21,7 @@ pub fn build(b: *std.Build) void {
     });
     exe.linkLibrary(lib);
 
-    const glfw = b.addModule("glfw", .{ .source_file = .{ .path = "src/glfw.zig" } });
-    exe.addModule("glfw", glfw);
+    _ = b.addModule("glfw", .{ .root_source_file = .{ .path = "src/glfw.zig" } });
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
