@@ -477,38 +477,38 @@ pub const Monitor = c_long;
 pub const Window = c_long;
 pub const CursorHandle = c_long;
 
-pub const ErrorFun = fn (error_code: c_int, description: [*:0]u8) callconv(.C) void;
-pub const WindowPosFun = fn (window: *Window, xpos: c_int, ypos: c_int) callconv(.C) void;
-pub const WindowSizeFun = fn (window: *Window, width: c_int, height: c_int) callconv(.C) void;
-pub const WindowCloseFun = fn (window: *Window) callconv(.C) void;
-pub const WindowRefreshFun = fn (window: *Window) callconv(.C) void;
-pub const WindowFocusFun = fn (window: *Window, focused: c_int) callconv(.C) void;
-pub const WindowIconifyFun = fn (window: *Window, iconified: c_int) callconv(.C) void;
-pub const WindowMaximizeFun = fn (window: *Window, iconified: c_int) callconv(.C) void;
-pub const FramebufferSizeFun = fn (window: *Window, width: c_int, height: c_int) callconv(.C) void;
-pub const WindowContentScaleFun = fn (window: *Window, xscale: f32, yscale: f32) callconv(.C) void;
+pub const ErrorFun = *const fn (error_code: c_int, description: [*:0]u8) callconv(.C) void;
+pub const WindowPosFun = *const fn (window: *Window, xpos: c_int, ypos: c_int) callconv(.C) void;
+pub const WindowSizeFun = *const fn (window: *Window, width: c_int, height: c_int) callconv(.C) void;
+pub const WindowCloseFun = *const fn (window: *Window) callconv(.C) void;
+pub const WindowRefreshFun = *const fn (window: *Window) callconv(.C) void;
+pub const WindowFocusFun = *const fn (window: *Window, focused: c_int) callconv(.C) void;
+pub const WindowIconifyFun = *const fn (window: *Window, iconified: c_int) callconv(.C) void;
+pub const WindowMaximizeFun = *const fn (window: *Window, iconified: c_int) callconv(.C) void;
+pub const FramebufferSizeFun = *const fn (window: *Window, width: c_int, height: c_int) callconv(.C) void;
+pub const WindowContentScaleFun = *const fn (window: *Window, xscale: f32, yscale: f32) callconv(.C) void;
 
 //Mods is bitfield of modifiers, button is enum of mouse buttons, and action is enum of keystates.
-pub const MouseButtonFun = fn (window: *Window, button: c_int, action: c_int, mods: c_int) callconv(.C) void;
-pub const CursorPosFun = fn (window: *Window, xpos: f64, ypos: f64) callconv(.C) void;
+pub const MouseButtonFun = *const fn (window: *Window, button: c_int, action: c_int, mods: c_int) callconv(.C) void;
+pub const CursorPosFun = *const fn (window: *Window, xpos: f64, ypos: f64) callconv(.C) void;
 
 //Entered is true or false
-pub const CursorEnterFun = fn (window: *Window, entered: c_int) callconv(.C) void;
-pub const ScrollFun = fn (window: *Window, xoffset: f64, yoffset: f64) callconv(.C) void;
+pub const CursorEnterFun = *const fn (window: *Window, entered: c_int) callconv(.C) void;
+pub const ScrollFun = *const fn (window: *Window, xoffset: f64, yoffset: f64) callconv(.C) void;
 
 //Mods is bitfield of modifiers, keys is enum of keys, and action is enum of keystates.
-pub const KeyFun = fn (window: *Window, key: c_int, scancode: c_int, action: c_int, mods: c_int) callconv(.C) void;
-pub const CharFun = fn (window: *Window, codepoint: c_uint) callconv(.C) void;
+pub const KeyFun = *const fn (window: *Window, key: c_int, scancode: c_int, action: c_int, mods: c_int) callconv(.C) void;
+pub const CharFun = *const fn (window: *Window, codepoint: c_uint) callconv(.C) void;
 
 //Mods refers to the bitfield of Modifiers
-pub const CharmodsFun = fn (window: *Window, codepoint: c_uint, mods: c_int) callconv(.C) void;
-pub const DropFun = fn (window: *Window, path_count: c_int, paths: [*:0]const u8) callconv(.C) void;
+pub const CharmodsFun = *const fn (window: *Window, codepoint: c_uint, mods: c_int) callconv(.C) void;
+pub const DropFun = *const fn (window: *Window, path_count: c_int, paths: [*:0]const u8) callconv(.C) void;
 
 //Event is one of two states defined by the enum 'Connection'
-pub const MonitorFun = fn (monitor: *Monitor, event: c_int) callconv(.C) void;
+pub const MonitorFun = *const fn (monitor: *Monitor, event: c_int) callconv(.C) void;
 
 //Event is one of two states defined by the enum 'Connection'
-pub const JoystickFun = fn (id: c_int, event: c_int) callconv(.C) void;
+pub const JoystickFun = *const fn (id: c_int, event: c_int) callconv(.C) void;
 
 pub const Vidmode = extern struct {
     width: i32,
