@@ -5,7 +5,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const lib = b.addStaticLibrary(.{
         .name = "zglfw",
-        .root_source_file = .{ .path = "src/glfw.zig" },
+        .root_source_file = b.path("src/glfw.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -15,13 +15,13 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "sample",
-        .root_source_file = .{ .path = "src/sample.zig" },
+        .root_source_file = b.path("src/sample.zig"),
         .target = target,
         .optimize = optimize,
     });
     exe.linkLibrary(lib);
 
-    _ = b.addModule("glfw", .{ .root_source_file = .{ .path = "src/glfw.zig" } });
+    _ = b.addModule("glfw", .{ .root_source_file = b.path("src/glfw.zig") });
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
