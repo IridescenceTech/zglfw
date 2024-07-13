@@ -32,6 +32,7 @@
 *.app
 
 zig-cache
+.zig-cache
 deps.zig
 gyro.lock
 
