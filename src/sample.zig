@@ -16,7 +16,7 @@ pub fn main() !void {
     defer glfw.terminate();
     std.debug.print("GLFW Init Succeeded.\n", .{});
 
-    var window: *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
+    const window: *glfw.Window = try glfw.createWindow(800, 640, "Hello World", null, null);
     defer glfw.destroyWindow(window);
 
     while (!glfw.windowShouldClose(window)) {

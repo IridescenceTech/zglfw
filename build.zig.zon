@@ -1,12 +1,13 @@
 .{
-    .name = "zglfw",
+    .name = .zglfw,
 
     .version = "0.1.0",
 
+    .fingerprint = 0x6fbada335d590806,
+
     .minimum_zig_version = "0.13.0",
 
-    .dependencies = .{
-    },
+    .dependencies = .{},
 
     .paths = .{
         "build.zig",

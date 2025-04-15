@@ -3,15 +3,14 @@ const std = @import("std");
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const lib = b.addStaticLibrary(.{
-        .name = "zglfw",
+
+    const glfw_mod = b.addModule("glfw", .{
         .root_source_file = b.path("src/glfw.zig"),
         .target = target,
         .optimize = optimize,
+        .link_libc = true,
     });
-    lib.linkLibC();
-    lib.linkSystemLibrary("glfw");
-    b.installArtifact(lib);
+    glfw_mod.linkSystemLibrary("glfw", .{});
 
     const exe = b.addExecutable(.{
         .name = "sample",
@@ -19,13 +18,12 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    exe.linkLibrary(lib);
+    exe.root_module.addImport("glfw", glfw_mod);
 
-    _ = b.addModule("glfw", .{ .root_source_file = b.path("src/glfw.zig") });
-    b.installArtifact(exe);
+    const install_exe = b.addInstallArtifact(exe, .{});
 
     const run_cmd = b.addRunArtifact(exe);
-    run_cmd.step.dependOn(b.getInstallStep());
+    run_cmd.step.dependOn(&install_exe.step);
 
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
