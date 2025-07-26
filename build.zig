@@ -1,4 +1,5 @@
 const std = @import("std");
+const builtin = @import("builtin");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
@@ -10,7 +11,11 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
         .link_libc = true,
     });
-    glfw_mod.linkSystemLibrary("glfw", .{});
+    if (builtin.os.tag == .windows) {
+        glfw_mod.linkSystemLibrary("glfw3", .{});
+    } else {
+        glfw_mod.linkSystemLibrary("glfw", .{});
+    }
 
     const exe = b.addExecutable(.{
         .name = "sample",
