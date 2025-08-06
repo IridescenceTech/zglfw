@@ -558,7 +558,7 @@ fn errorCheck() !void {
 fn errorCheck2() void {
     errorCheck() catch |err| {
         if (err != GLFWError.NoError) {
-            std.debug.print("error: {s}\n", .{@errorName(err)});
+            std.log.scoped(.zGLFW).err("{s}", .{@errorName(err)});
         }
     };
 }
