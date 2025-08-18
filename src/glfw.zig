@@ -656,7 +656,7 @@ pub fn getVideoModes(monitor: ?*Monitor, count: *c_int) ?[*]Vidmode {
 
 extern fn glfwGetVideoMode(monitor: ?*Monitor) ?*Vidmode;
 pub fn getVideoMode(monitor: ?*Monitor) ?*Vidmode {
-    const res = getVideoMode(monitor);
+    const res = glfwGetVideoMode(monitor);
     errorCheck2();
     return res;
 }
@@ -1157,7 +1157,7 @@ pub fn setJoystickUserPointer(jid: c_int, pointer: *anyopaque) void {
 
 extern fn glfwGetJoystickUserPointer(jid: c_int) *anyopaque;
 pub fn getJoystickUserPointer(jid: c_int) *anyopaque {
-    const res = getJoystickUserPointer(jid);
+    const res = glfwGetJoystickUserPointer(jid);
     errorCheck2();
     return res;
 }
