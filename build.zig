@@ -19,9 +19,11 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "sample",
-        .root_source_file = b.path("src/sample.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+            .root_source_file = b.path("src/sample.zig"),
+        }),
     });
     exe.root_module.addImport("glfw", glfw_mod);
 
