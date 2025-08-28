@@ -5,7 +5,7 @@
 
     .fingerprint = 0x6fbada335d590806,
 
-    .minimum_zig_version = "0.14.0",
+    .minimum_zig_version = "0.15.1",
 
     .dependencies = .{},
 
