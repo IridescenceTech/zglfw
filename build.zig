@@ -11,11 +11,6 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
         .link_libc = true,
     });
-    if (builtin.os.tag == .windows) {
-        glfw_mod.linkSystemLibrary("glfw3", .{});
-    } else {
-        glfw_mod.linkSystemLibrary("glfw", .{});
-    }
 
     const exe = b.addExecutable(.{
         .name = "sample",
