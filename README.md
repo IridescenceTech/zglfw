@@ -40,6 +40,10 @@ pub fn main() !void {
 }
 ```
 
+# Note
+
+This library does not compile or wrap GLFW the library into the zig build system. This wrapper can be used in tandem with other projects like [glfw.zig](https://github.com/tiawl/glfw.zig) which will compile the GLFW code directly in Zig.
+
 # Documentation
 
 I would suggest you look into the `glfw.zig` file themselves, as most of the changes are simple syntactically, but I have made some comments in cases where it may be different than you expect. Obviously [GLFW's Documentation](https://www.glfw.org/documentation.html) should cover most things that you want to know.
