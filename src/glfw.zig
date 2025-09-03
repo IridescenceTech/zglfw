@@ -363,6 +363,14 @@ pub const NativeContextAPI: ContextAPIAttribute = 0x00036001;
 pub const EGLContextAPI: ContextAPIAttribute = 0x00036002;
 pub const OSMesaContextAPI: ContextAPIAttribute = 0x00036003;
 
+pub const PlatformHint = c_int;
+pub const AnyPlatform: PlatformHint = 0x00060000;
+pub const PlatformWin32: PlatformHint = 0x00060001;
+pub const PlatformCocoa: PlatformHint = 0x00060002;
+pub const PlatformWayland: PlatformHint = 0x00060003;
+pub const PlatformX11: PlatformHint = 0x00060004;
+pub const PlatformNull: PlatformHint = 0x00060005;
+
 pub const VkInstance = usize;
 pub const VkPhysicalDevice = usize;
 pub const VkSurfaceKHR = u64;
@@ -469,6 +477,7 @@ pub const InitHint = c_int;
 pub const JoystickHatButtons: InitHint = 0x00050001;
 pub const CocoaChdirResources: InitHint = 0x00051001;
 pub const CocoaMenubar: InitHint = 0x00051002;
+pub const Platform: InitHint = 0x00050003;
 
 pub const GLproc = *const fn () callconv(.c) void;
 pub const VKproc = *const fn () callconv(.c) void;
