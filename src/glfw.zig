@@ -578,8 +578,8 @@ pub fn terminate() void {
 }
 
 extern fn glfwInitHint(hint: c_int, value: c_int) void;
-pub fn initHint(hint: InitHint, value: bool) void {
-    glfwInitHint((hint), @intFromBool(value));
+pub fn initHint(hint: InitHint, value: c_int) void {
+    glfwInitHint((hint), value);
     errorCheck2();
 }
 
