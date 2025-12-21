@@ -1003,7 +1003,7 @@ extern fn glfwGetKeyName(key: c_int, scancode: c_int) ?[*:0]const u8;
 pub fn getKeyName(key: Key, scancode: c_int) ?[:0]const u8 {
     const res = glfwGetKeyName((key), scancode);
     errorCheck2();
-    return std.mem.spanZ(res);
+    return std.mem.span(res);
 }
 
 extern fn glfwGetKeyScancode(key: c_int) c_int;
@@ -1216,7 +1216,7 @@ extern fn glfwGetClipboardString(window: ?*Window) ?[*:0]const u8;
 pub fn getClipboardString(window: ?*Window) ?[:0]const u8 {
     const res = glfwGetClipboardString(window);
     errorCheck2();
-    return std.mem.spanZ(res);
+    return std.mem.span(res);
 }
 
 extern fn glfwGetTime() f64;
