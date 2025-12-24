@@ -448,7 +448,7 @@ else if (builtin.abi == .android and (builtin.cpu.arch.isARM() or builtin.cpu.ar
     // as it does by default when compiling for the armeabi-v7a NDK ABI.
     .AAPCSVFP
 else
-    .C;
+    .c;
 
 pub const VkAllocationCallbacks = extern struct {
     p_user_data: ?*anyopaque = null,
